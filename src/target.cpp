@@ -1,43 +1,82 @@
 #include "target.h"
+#include <raymath.h>
+#include <cmath>
 
 Target::Target()
-{
-    position =
-    {
-        (float)GetRandomValue(-20,20),
-        (float)GetRandomValue(2,8),
-        (float)GetRandomValue(-20,20)
-    };
-
-    radius = 3.0f;
+{   radius = 1.0f;
     active = true;
+    position = {0,0,0};
+    velocity = {0,0,0};
 
-    velocity =
-    {
-        (float)GetRandomValue(-5,5), 0,
-        (float)GetRandomValue(-5,5)
-    };
+    Respawn(false);
 }
 
-void Target::Update(float dt,bool moving)
+void Target::Respawn(bool moving)
+{   active = true;
+    position =
+    {   (float)GetRandomValue(-90, 90),
+        (float)GetRandomValue(2, 8),
+        (float)GetRandomValue(-90, 90)
+    };
+
+    velocity = {0,0,0};
+
+    if(moving)
+    {
+        float speed =
+            (float)GetRandomValue(3, 10);
+        float angle =
+            DEG2RAD *
+            (float)GetRandomValue(0,359);
+
+        velocity =
+        {
+            cosf(angle) * speed,
+            0.0f,
+            sinf(angle) * speed
+        };
+    }
+}
+
+void Target::Update(float dt, bool moving)
 {
-    if(!moving) return;
+    if(!active)
+        return;
+    if(!moving)
+        return;
+
     position.x += velocity.x * dt;
     position.z += velocity.z * dt;
 
-    if(position.x > 25 || position.x < -25)
-        velocity.x *= -1;
-
-    if(position.z > 25 || position.z < -25)
-        velocity.z *= -1;
+    if(position.x > 100.0f)
+        position.x = -100.0f;
+    if(position.x < -100.0f)
+        position.x = 100.0f;
+    if(position.z > 100.0f)
+        position.z = -100.0f;
+    if(position.z < -100.0f)
+        position.z = 100.0f;
 }
 
-bool Target::CheckHit(Ray ray)
+bool Target::CheckHit(Vector3 arrowPosition)
 {
-    RayCollision hit =
-        GetRayCollisionSphere(ray,position,radius);
+    if(!active)
+        return false;
 
-    if(hit.hit)
+    float dx =
+        arrowPosition.x - position.x;
+    float dy =
+        arrowPosition.y - position.y;
+    float dz =
+        arrowPosition.z - position.z;
+    float distance =
+        sqrtf(
+            dx * dx +
+            dy * dy +
+            dz * dz
+        );
+
+    if(distance <= radius)
     {
         active = false;
         return true;
@@ -46,22 +85,62 @@ bool Target::CheckHit(Ray ray)
     return false;
 }
 
-
 void Target::Draw()
 {
-    if(!active) return;
+    if(!active)
+        return;
 
-    Vector3 front = position;
+    Vector3 front =
+    {
+        position.x,
+        position.y,
+        position.z
+    };
     Vector3 back =
     {
         position.x,
         position.y,
-        position.z + 0.1f
+        position.z + 0.15f
     };
 
-    DrawCylinderEx(front, back, 1.0f, 1.0f, 32, WHITE);
-    DrawCylinderEx(front, back, 0.8f, 0.8f, 32, BLACK);
-    DrawCylinderEx(front, back, 0.6f, 0.6f, 32, BLUE);
-    DrawCylinderEx(front, back, 0.4f, 0.4f, 32, RED);
-    DrawCylinderEx(front, back, 0.2f, 0.2f, 32, YELLOW);
+    DrawCylinderEx(
+        front,
+        back,
+        1.0f,
+        1.0f,
+        32,
+        WHITE
+    );
+    DrawCylinderEx(
+        front,
+        back,
+        0.8f,
+        0.8f,
+        32,
+        BLACK
+    );
+    DrawCylinderEx(
+        front,
+        back,
+        0.6f,
+        0.6f,
+        32,
+        BLUE
+    );
+    DrawCylinderEx(
+        front,
+        back,
+        0.4f,
+        0.4f,
+        32,
+        RED
+    );
+    DrawCylinderEx(
+        front,
+        back,
+        0.2f,
+        0.2f,
+        32,
+        YELLOW
+    );
 }
