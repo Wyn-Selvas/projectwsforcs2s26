@@ -33,4 +33,4 @@ This Projects is a 3d based Raylib archery "game" named Targets. You move around
 
 ## What you'd do with more time: 
 I think I would implement the mouse to control view. (I attempted it in the first push but it wasn't to my liking).
-I would also like to refine the physics of the arrows, specifically how they land, and work on graphics to look better maybe adding objects to be obstacles and add to the enviorment.
+I would also like to refine the physics of the arrows, specifically how they land, and work on graphics to look better maybe adding objects to be obstacles and add to the enviorment. I do like customized controls I would like more user input like prefrence for controls and speed for turning and moving.
