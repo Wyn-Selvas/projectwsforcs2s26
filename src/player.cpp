@@ -29,21 +29,23 @@ Vector3 Player::GetForward() const
 
 void Player::Update()
 {
-    const float moveSpeed = 12.0f * GetFrameTime();
-    const float mouseSensitivity = 0.001f;
+    const float moveSpeed = 4.0f * GetFrameTime();
+    const float turnSpeed = 2.0f * GetFrameTime();
 
-    Vector2 mouseDelta = GetMouseDelta();
+    // Arrow keys control camera rotation
+    if (IsKeyDown(KEY_LEFT))
+        yaw += turnSpeed;
 
-    //
-    
-    //mouseDelta.x = Clamp(mouseDelta.x, -2.0f, 2.0f);
-    //mouseDelta.y = Clamp(mouseDelta.y, -2.0f, 2.0f);
-    DrawText(TextFormat("dx: %.1f", mouseDelta.x), 10, 30, 20, WHITE);
-DrawText(TextFormat("dy: %.1f", mouseDelta.y), 10, 60, 20, WHITE);
-    yaw   -= mouseDelta.x * mouseSensitivity;
-    pitch -= mouseDelta.y * mouseSensitivity;
+    if (IsKeyDown(KEY_RIGHT))
+        yaw -= turnSpeed;
 
-    
+    if (IsKeyDown(KEY_UP))
+        pitch += turnSpeed;
+
+    if (IsKeyDown(KEY_DOWN))
+        pitch -= turnSpeed;
+
+    // Limit vertical look angle
     const float pitchLimit = 1.48f;
 
     if (pitch > pitchLimit)  pitch = pitchLimit;
@@ -51,7 +53,7 @@ DrawText(TextFormat("dy: %.1f", mouseDelta.y), 10, 60, 20, WHITE);
 
     Vector3 lookForward = GetForward();
 
-    
+    // Movement stays on the ground plane
     Vector3 moveForward =
     {
         lookForward.x,
@@ -68,22 +70,34 @@ DrawText(TextFormat("dy: %.1f", mouseDelta.y), 10, 60, 20, WHITE);
          moveForward.x
     };
 
+    // WASD movement
     if (IsKeyDown(KEY_W))
-        camera.position = Vector3Add(camera.position,
-                                     Vector3Scale(moveForward, moveSpeed));
+        camera.position = Vector3Add(
+            camera.position,
+            Vector3Scale(moveForward, moveSpeed)
+        );
     if (IsKeyDown(KEY_S))
-        camera.position = Vector3Subtract(camera.position,
-                                          Vector3Scale(moveForward, moveSpeed));
+        camera.position = Vector3Subtract(
+            camera.position,
+            Vector3Scale(moveForward, moveSpeed)
+        );
     if (IsKeyDown(KEY_A))
-        camera.position = Vector3Subtract(camera.position,
-                                          Vector3Scale(right, moveSpeed));
+        camera.position = Vector3Subtract(
+            camera.position,
+            Vector3Scale(right, moveSpeed)
+        );
     if (IsKeyDown(KEY_D))
-        camera.position = Vector3Add(camera.position,
-                                     Vector3Scale(right, moveSpeed));
+        camera.position = Vector3Add(
+            camera.position,
+            Vector3Scale(right, moveSpeed)
+        );
 
+    // player bounds
     camera.position.x = Clamp(camera.position.x, -95.0f, 95.0f);
     camera.position.z = Clamp(camera.position.z, -95.0f, 95.0f);
     camera.position.y = 2.0f;
-    camera.target = Vector3Add(camera.position, lookForward);
-}
 
+    // camera target
+    camera.target = Vector3Add(camera.position, lookForward);
+
+}
