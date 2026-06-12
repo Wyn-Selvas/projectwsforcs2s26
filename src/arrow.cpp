@@ -70,9 +70,11 @@ void Arrow::Draw()
             BROWN
         );
 
-        DrawSphere(
-            tip,
-            0.05f,
+        DrawRectangle(
+            tip.x - 0.05f,
+            tip.y - 0.05f,
+            0.1f,
+            0.1f,
             DARKBROWN
         );
 
@@ -99,7 +101,7 @@ void Arrow::Draw()
     DrawSphere(
         position,
         0.05f,
-        DARKBROWN
+        RED
     );
 
     Vector3 feather1 =

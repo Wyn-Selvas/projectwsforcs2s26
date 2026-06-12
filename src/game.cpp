@@ -17,7 +17,7 @@ Game::Game()
 
     raceTimer = 0.0f;
 
-    bowCharge = 0.0f;
+    Charge = 0.0f;
     charging = false;
 
     movingTargets = false;
@@ -49,7 +49,7 @@ void Game::ResetGame()
 
     raceTimer = 0.0f;
 
-    bowCharge = 0.0f;
+    Charge = 0.0f;
     charging = false;
 
     targetsRemaining = selectedTargetCount;
@@ -166,14 +166,14 @@ void Game::UpdateGameplay(float dt)
     }
     if(IsKeyPressed(KEY_SPACE) && allowShoot)
     {   charging = true;
-        bowCharge = 0.0f;
+        Charge = 0.0f;
     }
     if(charging && IsKeyDown(KEY_SPACE))
     {
-        bowCharge += dt;
-        if(bowCharge > 3.0f)
+        Charge += dt;
+        if(Charge > 3.0f)
         {
-            bowCharge = 3.0f;
+            Charge = 3.0f;
         }
     }
     if(charging && IsKeyReleased(KEY_SPACE))
@@ -185,7 +185,7 @@ void Game::UpdateGameplay(float dt)
 
         float power =
             20.0f +
-            (bowCharge * 20.0f);
+            (Charge * 20.0f);
         Vector3 start =
         {   player.camera.position.x,
             player.camera.position.y,
@@ -232,7 +232,7 @@ void Game::DrawWorld()
         {200,200},
         DARKGREEN
     );
-    DrawGrid(20,10);
+    //DrawGrid(20,10);
 
     for(auto& target : targets)
     {
@@ -332,13 +332,13 @@ void Game::DrawHUD()
         DrawRectangle(
             20,
             190,
-            (int)(100 * bowCharge),
+            (int)(100 * Charge),
             25,
             RED
         );
 
         DrawText(
-            "Bow Power",
+            "Power",
             20,
             220,
             20,
@@ -372,35 +372,35 @@ void Game::DrawMenu()
 {
     ClearBackground(BLACK);
     DrawText(
-        "ARCHERY RANGE",
+        "TARGET RANGE",
         400,
         100,
         50,
         WHITE
     );
     DrawText(
-        "1 - Still Target",
+        "Press 1 - Still Target",
         420,
         220,
         30,
         WHITE
     );
     DrawText(
-        "2 - Moving Target",
+        "Press 2 - Moving Target",
         420,
         270,
         30,
         WHITE
     );
     DrawText(
-        "3 - Timed Race",
+        "Press 3 - Timed targets",
         420,
         320,
         30,
         WHITE
     );
     DrawText(
-        "4 - Multi Target",
+        "Press 4 - Multiple Targets",
         420,
         370,
         30,
@@ -411,14 +411,14 @@ void Game::DrawMenu()
             "Target Count: %d",
             selectedTargetCount
         ),
-        420,
+        450,
         450,
         30,
         YELLOW
     );
     DrawText(
-        "UP / DOWN = Change Count",
-        420,
+        "UP(arrow key) / DOWN(arrow key) = Change Count(This only affects mode 3 and 4)",
+        120,
         490,
         25,
         WHITE
@@ -481,7 +481,7 @@ void Game::DrawMenu()
 
 void Game::DrawResults()
 {
-    ClearBackground(DARKBLUE);
+    ClearBackground(SKYBLUE);
     DrawText(
         "RESULTS",
         500,
@@ -494,7 +494,7 @@ void Game::DrawResults()
             "Score: %d",
             score
         ),
-        450,
+        500,
         250,
         35,
         WHITE
@@ -504,7 +504,7 @@ void Game::DrawResults()
             "Accuracy: %.1f%%",
             GetAccuracy()
         ),
-        450,
+        500,
         310,
         35,
         WHITE
@@ -516,21 +516,21 @@ void Game::DrawResults()
                 "Time: %.2f",
                 raceTimer
             ),
-            450,
+            500,
             370,
             35,
             YELLOW
         );
     }
     DrawText(
-        "Press ENTER For Menu",
-        380,
+        "Press M For Menu",
+        475,
         500,
         30,
         WHITE
     );
 
-    if(IsKeyPressed(KEY_ENTER))
+    if(IsKeyPressed(KEY_M))
     {
         screen = MENU;
     }

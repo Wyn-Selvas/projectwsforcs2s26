@@ -103,7 +103,7 @@ void Target::Draw()
         position.z + 0.15f
     };
 
-    DrawCylinderEx(
+   DrawCylinderEx(
         front,
         back,
         1.0f,

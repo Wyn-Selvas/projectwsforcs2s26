@@ -29,8 +29,8 @@ Vector3 Player::GetForward() const
 
 void Player::Update()
 {
-    const float moveSpeed = 4.0f * GetFrameTime();
-    const float turnSpeed = 2.0f * GetFrameTime();
+    const float moveSpeed = 9.5f * GetFrameTime(); // Adjust movement speed based on frame time
+    const float turnSpeed = 0.6f * GetFrameTime();// adjust view rotation speed
 
     // Arrow keys control camera rotation
     if (IsKeyDown(KEY_LEFT))

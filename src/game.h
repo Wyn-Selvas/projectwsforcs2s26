@@ -41,7 +41,7 @@ private:
     int selectedTargetCount;
     int targetsRemaining;
     float raceTimer;
-    float bowCharge;
+    float Charge;
     bool charging;
     bool movingTargets;
     float GetAccuracy() const;
